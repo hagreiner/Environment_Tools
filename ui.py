@@ -2,6 +2,7 @@ import maya.cmds as cmds
 from functools import partial
 import renamer as rn
 import fenceItemLogger as fl
+import nurbsLine_creation as nl
 
 
 def start():
@@ -77,17 +78,19 @@ class MainMenu:
         cmds.rowColumnLayout(numberOfColumns=2,
                              columnWidth=[(1, (self.width - 20) / 2.0), (2, (self.width - 20) / 2.0)],
                              parent=frameLayoutFence, co=[1, "both", 5])
-        cmds.button(label="Curve", h=20, command=lambda args: fl.Logger().curve())
+        cmds.button(label="Curve", h=20, command=lambda args: fl.Logger().curve("curve"))
         cmds.textField("curve", en=False, text="None", height=20)
-        cmds.button(label="Post", h=20, command=lambda args: fl.Logger().fencePost())
+        cmds.button(label="Post", h=20, command=lambda args: fl.Logger().fencePost("post"))
         cmds.textField("post", en=False, text="None", height=20)
-        cmds.button(label="Picket", h=20, command=lambda args: fl.Logger().fencePicket())
+        cmds.button(label="Picket", h=20, command=lambda args: fl.Logger().fencePicket("picket"))
         cmds.textField("picket", en=False, text="None", height=20)
 
         cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutFence,
                              co=[1, "both", 5])
         cmds.floatSliderGrp('spacing', label='Spacing', field=True, minValue=1, maxValue=100,
                             value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+        cmds.intSliderGrp('postNum', label='Number of Posts', field=True, minValue=2, maxValue=30, value=2, step=2,
+                            columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
         cmds.text("Cross Beams", height=20)
         cmds.text("select edge-loop location on post")
 
@@ -101,6 +104,19 @@ class MainMenu:
         cmds.textField("locationThree", en=False, text="None", height=20)
         cmds.button(label="Location Four", h=20, command=lambda args: fl.Logger().logLoop_4("locationFour"))
         cmds.textField("locationFour", en=False, text="None", height=20)
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutFence,
+                             co=[1, "both", 5])
+        cmds.intSliderGrp('sidesNum', label='Number of Sides', field=True, minValue=3, maxValue=30,
+                          value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+        cmds.intSliderGrp('crossWidth', label='Width', field=True, minValue=5, maxValue=75,
+                          value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+        cmds.intSliderGrp('crossHeight', label='Height', field=True, minValue=5, maxValue=75,
+                          value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutFence,
+                             co=[1, "both", 5])
+        cmds.button(label="Test", h=20,
+                    command=lambda args: (fl.Logger().confirm(), nl.FindPositions().postPositions()))
 
         # section three
         frameLayoutRenamer = cmds.frameLayout(width=self.width, label="Renaming Objects", collapse=False,

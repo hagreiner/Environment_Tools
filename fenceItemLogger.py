@@ -1,4 +1,5 @@
 import maya.cmds as cmds
+import nurbsLine_creation as nl
 
 
 class Logger:
@@ -16,34 +17,46 @@ class Logger:
     def logLoop_1(self, strType):
         selection = cmds.ls(sl=True)
         Logger.loop_1 = findLocationData(selection)
-        cmds.textField(strType, edit=True, text=selection[0])
+        updateField(strType, selection[0])
 
     def logLoop_2(self, strType):
         selection = cmds.ls(sl=True)
         Logger.loop_2 = findLocationData(selection)
-        cmds.textField(strType, edit=True, text=selection[0])
+        updateField(strType, selection[0])
 
     def logLoop_3(self, strType):
         selection = cmds.ls(sl=True)
         Logger.loop_3 = findLocationData(selection)
-        cmds.textField(strType, edit=True, text=selection[0])
+        updateField(strType, selection[0])
 
     def logLoop_4(self, strType):
         selection = cmds.ls(sl=True)
         Logger.loop_4 = findLocationData(selection)
-        cmds.textField(strType, edit=True, text=selection[0])
+        updateField(strType, selection[0])
 
-    def curve(self):
+    def curve(self, strType):
         selection = cmds.ls(sl=True)
         Logger.nurbsCurve = selection
+        updateField(strType, selection[0])
 
-    def fencePost(self):
+    def fencePost(self, strType):
         selection = cmds.ls(sl=True)
         Logger.post = selection
+        updateField(strType, selection[0])
 
-    def fencePicket(self):
+    def fencePicket(self, strType):
         selection = cmds.ls(sl=True)
         Logger.picket = selection
+        updateField(strType, selection[0])
+
+    def confirm(self):
+        nl.FindPositions.nurbsCurve = Logger.nurbsCurve
+        nl.FindPositions.loop_1 = Logger.loop_1
+        nl.FindPositions.loop_2 = Logger.loop_2
+        nl.FindPositions.loop_3 = Logger.loop_3
+        nl.FindPositions.loop_3 = Logger.loop_4
+        nl.FindPositions.post = Logger.post
+        nl.FindPositions.picket = Logger.picket
 
 
 def findLocationData(selection):
@@ -52,3 +65,7 @@ def findLocationData(selection):
     width = abs(xmax - xmin)
     height = abs((ymin - ymax) / 2.0)
     return {"width": width, "height": height}
+
+
+def updateField(fieldName, data):
+    cmds.textField(fieldName, edit=True, text=data)
