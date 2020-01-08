@@ -87,7 +87,7 @@ class MainMenu:
 
         cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutFence,
                              co=[1, "both", 5])
-        cmds.floatSliderGrp('spacing', label='Spacing', field=True, minValue=1, maxValue=100,
+        cmds.floatSliderGrp('spacing', label='Picket Spacing', field=True, minValue=1, maxValue=100,
                             value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
         cmds.intSliderGrp('postNum', label='Number of Posts', field=True, minValue=2, maxValue=30, value=2, step=2,
                             columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
@@ -108,10 +108,10 @@ class MainMenu:
                              co=[1, "both", 5])
         cmds.intSliderGrp('sidesNum', label='Number of Sides', field=True, minValue=3, maxValue=30,
                           value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
-        cmds.intSliderGrp('crossWidth', label='Width', field=True, minValue=5, maxValue=75,
-                          value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
-        cmds.intSliderGrp('crossHeight', label='Height', field=True, minValue=5, maxValue=75,
-                          value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+        cmds.floatSliderGrp('crossWidth', label='Width', field=True, minValue=5, maxValue=75,
+                            value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
+        cmds.floatSliderGrp('crossHeight', label='Height', field=True, minValue=5, maxValue=75,
+                            value=1, columnWidth=[(1, 100), (2, 50), (3, self.width - 150)], cal=[1, "center"])
 
         cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutFence,
                              co=[1, "both", 5])
