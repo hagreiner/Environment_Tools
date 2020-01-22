@@ -3,6 +3,7 @@ from functools import partial
 import renamer as rn
 import fenceItemLogger as fl
 import nurbsLine_creation as nl
+import stackingTool as st
 
 
 def start():
@@ -20,7 +21,7 @@ def end():
     :parameter: none
     :return: nothing
     """
-    reset()
+
     if cmds.window("mainUI", exists=True):
         cmds.deleteUI("mainUI", window=True)
 
@@ -57,6 +58,7 @@ class MainMenu:
         """
         self.typeCol = cmds.columnLayout(self.col, parent=self.window, w=self.width)
 
+        """
         # section one
         frameLayout1 = cmds.frameLayout(width=self.width, label="Rocks", collapse=True, collapsable=True,
                                         marginHeight=10,
@@ -67,6 +69,7 @@ class MainMenu:
         cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayout1,
                              co=[1, "both", 5])
         cmds.text("stuff")
+        """
 
         # section two
         frameLayoutFence = cmds.frameLayout(width=self.width, label="Fences", collapse=True, collapsable=True,
@@ -119,6 +122,50 @@ class MainMenu:
                     command=lambda args: (fl.Logger().confirm(), nl.FindPositions().postPositions()))
 
         # section three
+        frameLayoutStacking = cmds.frameLayout(width=self.width, label="Stacking Objects", collapse=False,
+                                             collapsable=True, marginHeight=10,
+                                             marginWidth=5, parent=self.typeCol,
+                                             ec=partial(frameCollapseChanged, str(self.col)),
+                                             cc=partial(frameCollapseChanged, str(self.col)))
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutStacking,
+                             co=[1, "both", 5])
+        cmds.text("Load In Objects")
+        cmds.rowColumnLayout(numberOfColumns=3,
+                             columnWidth=[(1, (self.width - 10) / 3.0), (2, (self.width - 10) / 3.0),
+                                          (3, (self.width - 10) / 3.0), ],
+                             parent=frameLayoutStacking, co=[1, "both", 5])
+        cmds.button("Object One", command=lambda args: st.LogObjects().saveObject("object_one", 1))  # 1
+        cmds.textField("object_one", en=False, text="None")
+        cmds.button("Clear One", command=lambda args: st.LogObjects().deleteObject("object_one", 1))
+        cmds.button("Object Two", command=lambda args: st.LogObjects().saveObject("object_two", 2))  # 2
+        cmds.textField("object_two", en=False, text="None")
+        cmds.button("Clear Two", command=lambda args: st.LogObjects().deleteObject("object_two", 2))
+        cmds.button("Object Three", command=lambda args: st.LogObjects().saveObject("object_three", 3))  # 3
+        cmds.textField("object_three", en=False, text="None")
+        cmds.button("Clear Three", command=lambda args: st.LogObjects().deleteObject("object_three", 3))
+
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutStacking,
+                             co=[1, "both", 5])
+        cmds.text("StackSize")
+
+        cmds.rowColumnLayout(numberOfColumns=3,
+                             columnWidth=[(1, (self.width - 10)/3.0), (2, (self.width - 10)/3.0),
+                                          (3, (self.width - 10)/3.0), ],
+                             parent=frameLayoutStacking, co=[1, "both", 5])
+        cmds.radioCollection("size")
+        cmds.radioButton("smallStack", label="Small")
+        cmds.radioButton("mediumStack", label="Medium", sl=True)
+        cmds.radioButton("largeStack", label="Large")
+
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutStacking,
+                             co=[1, "both", 5])
+        cmds.text("Disorder")
+        cmds.text("(least to most)")
+        cmds.floatSlider("disorder", min=0, max=1, value=0.5)
+        cmds.text("")
+        cmds.button(label="Stack It!", h=30, command=lambda args: st.Stack().create())
+
+        # section four
         frameLayoutRenamer = cmds.frameLayout(width=self.width, label="Renaming Objects", collapse=False,
                                               collapsable=True, marginHeight=10,
                                               marginWidth=5, parent=self.typeCol,
