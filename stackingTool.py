@@ -73,6 +73,7 @@ class StackObjects:
 class GetObjectInformation:
     def __init__(self, object):
         self.object = object
+        cmds.select(self.object)
         self.xmin, self.ymin, self.zmin, self.xmax, self.ymax, self.zmax = cmds.xform(bb=True, query=True)
 
     def getHeight(self):
