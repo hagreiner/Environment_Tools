@@ -1,6 +1,7 @@
 import maya.cmds as cmds
 import ui
 import random
+import re
 
 
 class LogObjects:
@@ -19,6 +20,12 @@ class LogObjects:
 
 
 class Stack:
+    def __init__(self):
+        self.rotationList = verifyList(StackObjects().determineRotation())
+        unsafe_xMove, unsafe_zMove = StackObjects().determineMovement()
+        self.xMove = verifyList(unsafe_xMove)
+        self.zMove = verifyList(unsafe_zMove)
+
     def create(self):
         keyAbleList = varifyObjects()
 
@@ -28,18 +35,27 @@ class Stack:
             LogObjects.depthDict[object] = GetObjectInformation(LogObjects.savedObjectList[object]).getDepth()
 
         startingHeight = 0
-        rotationList = StackObjects().determineRotation()
-        xMove, zMove = StackObjects().determineMovement()
 
         for object in range(StackObjects().determineStackSize()):
             key = random.choice(keyAbleList)
-            rotation = random.choice(rotationList)
 
             stackItem = cmds.duplicate(LogObjects.savedObjectList[key])
-            cmds.move(random.choice(xMove), startingHeight, random.choice(zMove), stackItem)
-            cmds.rotate(0, rotation, 0, stackItem)
+            if len(stackItem) > 1:
+                Stack().stackGroup(stackItem, startingHeight)
+            else:
+                Stack().stackObject(stackItem, startingHeight)
 
             startingHeight += LogObjects.heightDict[key]
+
+    def stackObject(self, object, yMove):
+        cmds.move(random.choice(self.xMove), yMove, random.choice(self.zMove), object)
+        cmds.rotate(0, random.choice(self.rotationList), 0, object)
+
+    def stackGroup(self, group, yMove):
+        cmds.select(group[0])
+        item = cmds.ls(dagObjects=True, sl=True) #first item is groupName
+        cmds.move(random.choice(self.xMove), yMove, random.choice(self.zMove), item[0])
+        cmds.rotate(0, random.choice(self.rotationList), 0, item[0])
 
 
 class StackObjects:
@@ -102,3 +118,9 @@ def varifyObjects():
     if len(keyList) == 0:
         print("this will not work")
     return keyList
+
+
+def verifyList(unsafeList):
+    if len(unsafeList) == 0:
+        unsafeList.append(0)
+    return unsafeList
