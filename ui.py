@@ -4,6 +4,7 @@ import renamer as rn
 import fenceItemLogger as fl
 import nurbsLine_creation as nl
 import stackingTool as st
+import leaninAgainstWall as lw
 
 
 def start():
@@ -166,6 +167,15 @@ class MainMenu:
         cmds.button(label="Stack It!", h=30, command=lambda args: st.Stack().create())
 
         # section four
+        frameLayoutLeaning = cmds.frameLayout(width=self.width, label="Lean Against Wall", collapse=False,
+                                             collapsable=True, marginHeight=10,
+                                             marginWidth=5, parent=self.typeCol,
+                                             ec=partial(frameCollapseChanged, str(self.col)),
+                                             cc=partial(frameCollapseChanged, str(self.col)))
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutStacking,
+                             co=[1, "both", 5])
+
+        # section five
         frameLayoutRenamer = cmds.frameLayout(width=self.width, label="Renaming Objects", collapse=False,
                                               collapsable=True, marginHeight=10,
                                               marginWidth=5, parent=self.typeCol,
