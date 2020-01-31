@@ -1,5 +1,5 @@
 """"
-from Environment_Tools import nurbsLine_creation, nurbsLine_fenceAddition, renamer, rock_addDetail, rock_baseModel, ui, fenceItemLogger, stackingTool
+from Environment_Tools import nurbsLine_creation, nurbsLine_fenceAddition, renamer, rock_addDetail, rock_baseModel, ui, fenceItemLogger, stackingTool, leanAgainstWall
 reload(nurbsLine_creation)
 reload(nurbsLine_fenceAddition)
 reload(renamer)
@@ -8,5 +8,6 @@ reload(rock_baseModel)
 reload(ui)
 reload(fenceItemLogger)
 reload(stackingTool)
+reload(leanAgainstWall)
 ui.start()
 """

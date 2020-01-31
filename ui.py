@@ -4,7 +4,7 @@ import renamer as rn
 import fenceItemLogger as fl
 import nurbsLine_creation as nl
 import stackingTool as st
-import leaninAgainstWall as lw
+import leanAgainstWall as lw
 
 
 def start():
@@ -123,7 +123,7 @@ class MainMenu:
                     command=lambda args: (fl.Logger().confirm(), nl.FindPositions().postPositions()))
 
         # section three
-        frameLayoutStacking = cmds.frameLayout(width=self.width, label="Stacking Objects", collapse=False,
+        frameLayoutStacking = cmds.frameLayout(width=self.width, label="Stacking Objects", collapse=True,
                                              collapsable=True, marginHeight=10,
                                              marginWidth=5, parent=self.typeCol,
                                              ec=partial(frameCollapseChanged, str(self.col)),
@@ -172,8 +172,11 @@ class MainMenu:
                                              marginWidth=5, parent=self.typeCol,
                                              ec=partial(frameCollapseChanged, str(self.col)),
                                              cc=partial(frameCollapseChanged, str(self.col)))
-        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutStacking,
+        cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, self.width - 10)], parent=frameLayoutLeaning,
                              co=[1, "both", 5])
+        cmds.button(label="Load Object", h=30, command=lambda args: lw.LeanObject().loadInObject())
+        cmds.button(label="Wall", h=30, command=lambda args: lw.LeanObject().loadInWall())
+        cmds.button(label="Lean It", h=30, command=lambda args: lw.LeanObject().leanIt())
 
         # section five
         frameLayoutRenamer = cmds.frameLayout(width=self.width, label="Renaming Objects", collapse=False,
